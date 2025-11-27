@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>UK Qualification Verification Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background-color: #0b1020;
+      color: #f5f5f5;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #27335a 0, #050814 60%);
+    }
+
+    .card {
+      background: #101524;
+      border-radius: 18px;
+      padding: 28px 28px 32px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+      max-width: 520px;
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .logo {
+      width: 46px;
+      height: 46px;
+      flex-shrink: 0;
+    }
+
+    .title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      font-size: 0.78rem;
+      opacity: 0.75;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    form {
+      display: grid;
+      gap: 14px;
+      margin-top: 6px;
+    }
+
+    label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      opacity: 0.78;
+    }
+
+    input[type="text"] {
+      margin-top: 4px;
+      width: 100%;
+      padding: 9px 11px;
+      border-radius: 9px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(2, 8, 23, 0.85);
+      color: #f5f5f5;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: #4f9cff;
+      box-shadow: 0 0 0 1px rgba(79, 156, 255, 0.4);
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    .btn {
+      margin-top: 6px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #4f9cff, #3b82f6);
+      color: #f9fafb;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.12s ease, box-shadow 0.12s ease,
+        filter 0.12s ease;
+      width: 100%;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(15, 118, 255, 0.35);
+      filter: brightness(1.05);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 14px 14px 12px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.9);
+      display: none;
+    }
+
+    .result-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .result.normal {
+      border-color: rgba(52, 211, 153, 0.7);
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.35);
+    }
+
+    .result.warning {
+      border-color: rgba(248, 113, 113, 0.85);
+      box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.5);
+      background: linear-gradient(
+        135deg,
+        rgba(127, 29, 29, 0.95),
+        rgba(24, 24, 27, 1)
+      );
+    }
+
+    .result-footer {
+      margin-top: 8px;
+      font-size: 0.78rem;
+      opacity: 0.8;
+    }
+
+    .footnote {
+      margin-top: 14px;
+      font-size: 0.7rem;
+      opacity: 0.55;
+      text-align: right;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      padding: 2px 9px;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      opacity: 0.85;
+      margin-top: 4px;
+    }
+
+    .badge span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        margin: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <!-- Simple SVG logo so it looks legit -->
+      <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="gradShield" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#3b82f6" />
+            <stop offset="1" stop-color="#0ea5e9" />
+          </linearGradient>
+        </defs>
+        <rect
+          x="10"
+          y="8"
+          width="44"
+          height="48"
+          rx="14"
+          ry="14"
+          fill="url(#gradShield)"
+        />
+        <path
+          d="M20 30l8.5 8.5L44 23"
+          fill="none"
+          stroke="#e5f3ff"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <circle
+          cx="50"
+          cy="14"
+          r="5"
+          fill="#22c55e"
+          stroke="#e5f3ff"
+          stroke-width="1.4"
+        />
+      </svg>
+
+      <div>
+        <div class="subtitle">UK central register</div>
+        <div class="title">Qualification Verification Portal</div>
+        <div class="badge">
+          <span class="dot"></span>
+          Live status: Online
+        </div>
+      </div>
+    </div>
+
+    <form id="checkForm">
+      <div>
+        <label for="firstName">First Name</label>
+        <input id="firstName" type="text" autocomplete="off" required />
+      </div>
+
+      <div>
+        <label for="lastName">Surname</label>
+        <input id="lastName" type="text" autocomplete="off" required />
+      </div>
+
+      <div>
+        <label for="certificate">Certificate Number</label>
+        <input id="certificate" type="text" autocomplete="off" required />
+      </div>
+
+      <button type="submit" class="btn">
+        Verify Qualification
+      </button>
+    </form>
+
+    <div id="resultBox" class="result">
+      <div class="result-title" id="resultTitle"></div>
+      <div id="resultBody"></div>
+      <div class="result-footer" id="resultFooter"></div>
+    </div>
+
+    <div class="footnote">
+      This tool is for demonstration and training purposes only and does not
+      access any real qualification database.
+    </div>
+  </div>
+
+  <script>
+    const qualifications = [
+      "City & Guilds Level 2 Diploma in Electrical Installation",
+      "City & Guilds Level 3 Award in Health and Safety in the Workplace",
+      "NVQ Level 2 Certificate in Construction Operations",
+      "NVQ Level 3 Diploma in Occupational Work Supervision",
+      "BTEC Level 3 National Extended Diploma in Construction",
+      "IOSH Managing Safely (Accredited Certificate)",
+      "NEBOSH National General Certificate in Occupational Health and Safety",
+      "CITB Site Safety Plus – Site Supervisors’ Safety Training Scheme (SSSTS)",
+      "City & Guilds 18th Edition Wiring Regulations (BS 7671)",
+      "NVQ Level 2 Diploma in Painting and Decorating"
+    ];
+
+    const form = document.getElementById("checkForm");
+    const resultBox = document.getElementById("resultBox");
+    const resultTitle = document.getElementById("resultTitle");
+    const resultBody = document.getElementById("resultBody");
+    const resultFooter = document.getElementById("resultFooter");
+
+    function hashString(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = (hash + str.charCodeAt(i) * (i + 7)) % 100000;
+      }
+      return hash;
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const first = document.getElementById("firstName").value.trim();
+      const last = document.getElementById("lastName").value.trim();
+      const cert = document.getElementById("certificate").value.trim();
+
+      if (!first || !last || !cert) return;
+
+      const fullKey = (first + last + cert).toLowerCase();
+
+      // Example of a special "easter egg" for a **fictional** name.
+      // If you ever add your own private in-joke, be sure not to
+      // make real-world accusations about real people.
+      if (fullKey === "johnsmith1234") {
+        resultBox.className = "result warning";
+        resultTitle.textContent = "Record cannot be verified";
+        resultBody.textContent =
+          "The details entered do not match any record held on this demonstration system.";
+        resultFooter.textContent =
+          "If you believe this is an error, please contact your training provider or awarding body for official verification.";
+        resultBox.style.display = "block";
+        return;
+      }
+
+      // Otherwise, return a deterministic “qualification”
+      const hash = hashString(fullKey);
+      const qual = qualifications[hash % qualifications.length];
+      const issueYear = 2005 + (hash % 19); // 2005–2023
+      const centreCode = "UK-" + String(1000 + (hash % 9000));
+
+      resultBox.className = "result normal";
+      resultTitle.textContent = "Record located: Qualification verified";
+      resultBody.innerHTML =
+        "<strong>Name:</strong> " +
+        first +
+        " " +
+        last +
+        "<br><strong>Certificate No.:</strong> " +
+        cert +
+        "<br><strong>Qualification:</strong> " +
+        qual +
+        "<br><strong>Issue Year:</strong> " +
+        issueYear +
+        "<br><strong>Centre Code:</strong> " +
+        centreCode;
+
+      resultFooter.textContent =
+        "This verification is generated by a simulated training database and is not an official confirmation from any awarding organisation.";
+      resultBox.style.display = "block";
+    });
+  </script>
+</body>
+</html>
