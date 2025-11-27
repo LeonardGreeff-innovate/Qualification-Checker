@@ -124,6 +124,22 @@
       background: #020617;
     }
 
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      opacity: 0.85;
+      margin-top: 4px;
+    }
+
+    .checkbox-row input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #ef4444;
+      cursor: pointer;
+    }
+
     .btn {
       margin-top: 10px;
       width: 100%;
@@ -230,7 +246,7 @@
   <div class="page">
     <header class="site-header">
       <div class="logo-wrap">
-        <!-- Uses your existing PNG logo in assets/logo.png -->
+        <!-- Your logo file -->
         <img src="assets/logo.png" alt="UK Qualification Verification Portal logo" class="logo-img" />
         <div class="header-text">
           <div class="subtitle">UK CENTRAL REGISTER</div>
@@ -258,6 +274,12 @@
         <div class="field">
           <label for="certificate">Certificate number</label>
           <input id="certificate" type="text" autocomplete="off" required />
+        </div>
+
+        <!-- New checkbox trigger -->
+        <div class="checkbox-row">
+          <input type="checkbox" id="flagFake" />
+          <label for="flagFake">Flag this record as fake qualification (test)</label>
         </div>
 
         <button type="submit" class="btn">Verify qualification</button>
@@ -294,6 +316,7 @@
     const resultTitle = document.getElementById("resultTitle");
     const resultBody = document.getElementById("resultBody");
     const resultFooter = document.getElementById("resultFooter");
+    const flagFake = document.getElementById("flagFake");
 
     function hashString(str) {
       let hash = 0;
@@ -316,21 +339,32 @@
       const lastLower = last.toLowerCase();
       const certLower = cert.toLowerCase();
 
-      // SPECIAL DEMO FRAUD TRIGGER (fictional record)
-      // Change "demo" / "user" / "0000" only for another *fictional* test name if you like.
+      // 1) Checkbox trigger – manual fake flag
+      if (flagFake.checked) {
+        resultBox.className = "result warning show";
+        resultTitle.textContent = "Warning: fake qualification flagged";
+        resultBody.innerHTML =
+          "This record has been <strong>manually flagged</strong> as a <strong>fake qualification</strong>.";
+        resultFooter.textContent =
+          "Treat this record as invalid unless verified through approved channels.";
+        alert("Fake qualification flagged for this record.");
+        flagFake.checked = false; // reset after use
+        return;
+      }
+
+      // 2) Fictional built-in trigger (Demo User / 0000)
       if (firstLower === "demo" && lastLower === "user" && certLower === "0000") {
         resultBox.className = "result warning show";
         resultTitle.textContent = "Warning: fake qualification detected";
         resultBody.innerHTML =
-          "The qualification details entered <strong>cannot be verified</strong> " +
-          "and appear to relate to a <strong>fake certificate</strong>.";
+          "The qualification details entered <strong>cannot be verified</strong> and appear to relate to a <strong>fake certificate</strong>.";
         resultFooter.textContent =
           "Please treat this record as invalid and seek verification through approved channels.";
         alert("Fake qualification detected for this record.");
         return;
       }
 
-      // Normal deterministic qualification result
+      // 3) Normal deterministic qualification result
       const fullKey = (first + last + cert).toLowerCase();
       const hash = hashString(fullKey);
 
@@ -348,14 +382,3 @@
         "<br><strong>Certificate No.:</strong> " +
         cert +
         "<br><strong>Qualification:</strong> " +
-        qual +
-        "<br><strong>Issue year:</strong> " +
-        issueYear +
-        "<br><strong>Centre code:</strong> " +
-        centreCode;
-
-      resultFooter.textContent = "Record generated.";
-    });
-  </script>
-</body>
-</html>
