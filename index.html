@@ -124,12 +124,11 @@
       background: #020617;
     }
 
-    /* Secret checkbox – small square, no visible label */
+    /* SECRET TICK BOX */
     .secret-flag-row {
-      margin-top: 4px;
+      margin-top: 6px;
       display: flex;
       align-items: center;
-      justify-content: flex-start;
     }
 
     .secret-flag-row input[type="checkbox"] {
@@ -172,7 +171,7 @@
     .result {
       display: none;
       margin-top: 18px;
-      padding: 14px 14px 12px;
+      padding: 16px 16px 14px;
       border-radius: 12px;
       border: 1px solid rgba(148, 163, 184, 0.5);
       background: radial-gradient(
@@ -220,25 +219,6 @@
       font-size: 0.78rem;
       opacity: 0.75;
     }
-
-    @media (max-width: 720px) {
-      body {
-        padding: 16px 10px;
-      }
-
-      .card {
-        padding: 22px 18px 18px;
-      }
-
-      .logo-img {
-        width: 56px;
-        height: 56px;
-      }
-
-      .header-text .title {
-        font-size: 1.3rem;
-      }
-    }
   </style>
 </head>
 <body>
@@ -272,7 +252,8 @@
         <div class="field">
           <label for="certificate">Certificate number</label>
           <input id="certificate" type="text" autocomplete="off" required />
-          <!-- secret tick box, no text -->
+
+          <!-- secret tick box -->
           <div class="secret-flag-row">
             <input type="checkbox" id="flagFake" />
           </div>
@@ -281,9 +262,9 @@
         <button type="submit" class="btn">Verify qualification</button>
       </form>
 
-      <section id="resultBox" class="result" aria-live="polite">
+      <section id="resultBox" class="result">
         <div class="result-title" id="resultTitle"></div>
-        <div class="result-body" id="resultBody"></div>
+        <div id="resultBody"></div>
         <div class="result-footer" id="resultFooter"></div>
       </section>
     </main>
@@ -331,7 +312,7 @@
 
       if (!first || !last || !cert) return;
 
-      // 1) Secret checkbox trigger – manual fake flag
+      // SECRET TICK — triggers fake qualification (NO POPUP)
       if (flagFake && flagFake.checked) {
         resultBox.className = "result warning show";
         resultTitle.textContent = "Warning: fake qualification flagged";
@@ -339,17 +320,17 @@
           "This record has been <strong>manually flagged</strong> as a <strong>fake qualification</strong>.";
         resultFooter.textContent =
           "Treat this record as invalid unless verified through approved channels.";
-        alert("Fake qualification flagged for this record.");
-        flagFake.checked = false; // reset tick
+
+        flagFake.checked = false;
         return;
       }
 
-      // 2) Normal deterministic qualification result
+      // NORMAL RESULT
       const fullKey = (first + last + cert).toLowerCase();
       const hash = hashString(fullKey);
 
       const qual = qualifications[hash % qualifications.length];
-      const issueYear = 2005 + (hash % 19); // 2005–2023
+      const issueYear = 2005 + (hash % 19);
       const centreCode = "UK-" + String(1000 + (hash % 9000));
 
       resultBox.className = "result normal show";
@@ -367,7 +348,6 @@
         issueYear +
         "<br><strong>Centre code:</strong> " +
         centreCode;
-
       resultFooter.textContent = "Record generated.";
     });
   </script>
