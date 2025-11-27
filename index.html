@@ -4,10 +4,62 @@
   <meta charset="UTF-8" />
   <title>UK Qualification Verification Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Simplified placeholder -->
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="stylesheet" href="styles/style.css" />
 </head>
 <body>
-  <h1>UK Qualification Verification Portal</h1>
-  <p>Your site is working. Replace this with full code if needed.</p>
+  <div class="page">
+    <header class="site-header">
+      <div class="logo-wrap">
+        <img src="assets/logo.png" alt="UK Qualification Verification Portal logo" class="logo-img" />
+        <div class="header-text">
+          <div class="subtitle">UK CENTRAL REGISTER</div>
+          <h1 class="title">Qualification Verification Portal</h1>
+          <div class="status-badge">
+            <span class="dot"></span>
+            Live status: Online (Demo)
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="card">
+      <form id="checkForm" class="form">
+        <div class="field">
+          <label for="firstName">First name</label>
+          <input id="firstName" type="text" autocomplete="off" required />
+        </div>
+
+        <div class="field">
+          <label for="lastName">Surname</label>
+          <input id="lastName" type="text" autocomplete="off" required />
+        </div>
+
+        <div class="field">
+          <label for="certificate">Certificate number</label>
+          <input id="certificate" type="text" autocomplete="off" required />
+        </div>
+
+        <button type="submit" class="btn">Verify qualification</button>
+      </form>
+
+      <section id="resultBox" class="result" aria-live="polite">
+        <div class="result-title" id="resultTitle"></div>
+        <div class="result-body" id="resultBody"></div>
+        <div class="result-footer" id="resultFooter"></div>
+      </section>
+
+      <p class="disclaimer">
+        This portal is a <strong>demonstration tool only</strong>. It does not connect to any real awarding bodies or official databases, and any
+        results shown are simulated.
+      </p>
+    </main>
+
+    <footer class="site-footer">
+      <small>© 2025 UK Qualification Verification Portal – Demo Environment</small>
+    </footer>
+  </div>
+
+  <script src="scripts/app.js"></script>
 </body>
 </html>
